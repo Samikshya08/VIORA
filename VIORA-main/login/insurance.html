@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIORA - Insurance Policies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 0 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Insurance Cards Grid */
+        .insurance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px 0 80px;
+        }
+
+        .insurance-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideInUp 0.8s ease-out forwards;
+        }
+
+        .insurance-card:nth-child(1) { animation-delay: 0.1s; }
+        .insurance-card:nth-child(2) { animation-delay: 0.2s; }
+        .insurance-card:nth-child(3) { animation-delay: 0.3s; }
+        .insurance-card:nth-child(4) { animation-delay: 0.4s; }
+        .insurance-card:nth-child(5) { animation-delay: 0.5s; }
+        .insurance-card:nth-child(6) { animation-delay: 0.6s; }
+        .insurance-card:nth-child(7) { animation-delay: 0.7s; }
+
+        .insurance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .insurance-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .insurance-card:hover::before {
+            animation: shimmer 1s ease-in-out;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #00f5ff, #00d4aa);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .insurance-card:hover .card-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00f5ff;
+        }
+
+        .card-term {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .card-features li {
+            padding: 5px 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .card-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #00f5ff;
+            font-weight: bold;
+        }
+
+        .card-button {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #00f5ff, #00d4aa);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,245,255,0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .insurance-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .insurance-card {
+                padding: 25px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .card-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Insurance Policies</h1>
+            <p>Choose the perfect insurance plan that matches your health needs and budget. All policies are designed to energize your health journey with comprehensive coverage.</p>
+        </header>
+
+        <div class="insurance-grid">
+            <!-- Card 1: Basic Health Insurance -->
+            <div class="insurance-card">
+                <div class="card-icon">🏥</div>
+                <h3 class="card-title">Basic Health Shield</h3>
+                <p class="card-description">Essential health coverage for individuals and families. Perfect for routine checkups and emergency care.</p>
+                <div class="card-details">
+                    <div class="card-price">₹2,999</div>
+                    <div class="card-term">Annual</div>
+                </div>
+                <ul class="card-features">
+                    <li>Coverage up to ₹3 Lakhs</li>
+                    <li>Cashless hospitalization</li>
+                    <li>Pre & post hospitalization</li>
+                    <li>24/7 customer support</li>
+                </ul>
+                <button class="card-button">Choose Plan</button>
+            </div>
+
+            <!-- Card 2: Premium Health Insurance -->
+            <div class="insurance-card">
+                <div class="card-icon">⭐</div>
+                <h3 class="card-title">Premium Health Pro</h3>
+                <p class="card-description">Comprehensive coverage with additional benefits including wellness programs and preventive care.</p>
+                <div class="card-details">
+                    <div class="card-price">₹5,999</div>
+                    <div class="card-term">Annual</div>
+                </div>
+                <ul class="card-features">
+                    <li>Coverage up to ₹10 Lakhs</li>
+                    <li>Wellness benefits included</li>
+                    <li>Maternity coverage</li>
+                    <li>Global coverage</li>
+                </ul>
+                <button class="card-button">Choose Plan</button>
+            </div>
+
+            <!-- Card 3: Family Health Insurance -->
+            <div class="insurance-card">
+                <div class="card-icon">👨‍👩‍👧‍👦</div>
+                <h3 class="card-title">Family Care Plus</h3>
+                <p class="card-description">Complete family protection with coverage for spouse, children, and dependent parents.</p>
+                <div class="card-details">
+                    <div class="card-price">₹8,999</div>
+                    <div class="card-term">Annual</div>
+                </div>
+                <ul class="card-features">
+                    <li>Coverage up to ₹15 Lakhs</li>
+                    <li>Covers 6 family members</li>
+                    <li>Child vaccination coverage</li>
+                    <li>Senior citizen benefits</li>
+                </ul>
+                <button class="card-button">Choose Plan</button>
+            </div>
+
+            <!-- Card 4: Critical Illness Insurance -->
+            <div class="insurance-card">
+                <div class="card-icon">🩺</div>
+                <h3 class="card-title">Critical Care Shield</h3>
+                <p class="card-description">Specialized coverage for critical illnesses including cancer, heart disease, and major surgeries.</p>
+                <div class="card-details">
+                    <div class="card-price">₹4,499</div>
+                    <div class="card-term">Annual</div>
+                </div>
+                <ul class="card-features">
+                    <li>Coverage up to ₹25 Lakhs</li>
+                    <li>37 critical illnesses covered</li>
+                    <li>Lump sum benefit</li>
+                    <li>No medical checkup</li>
+                </ul>
+                <button class="card-button">Choose Plan</button>
+            </div>
+
+            <!-- Card 5: Senior Citizen Insurance -->
+            <div class="insurance-card">
+                <div class="card-icon">👴</div>
+                <h3 class="card-title">Golden Years Care</h3>
+                <p class="card-description">Specially designed for senior citizens aged 60+ with comprehensive health benefits.</p>
+                <div class="card-details">
+                    <div class="card-price">₹12,999</div>
+                    <div class="card-term">Annual</div>
+                </div>
+                <ul class="card-features">
+                    <li>Coverage up to ₹5 Lakhs</li>
+                    <li>Pre-existing diseases covered</li>
+                    <li>Home healthcare included</li>
+                    <li>Lifetime renewability</li>
+                </ul>
+                <button class="card-button">Choose Plan</button>
+            </div>
+
+            <!-- Card 6: Maternity Insurance -->
+            <div class="insurance-card">
+                <div class="card-icon">🤱</div>
+                <h3 class="card-title">Maternity Bliss</h3>
+                <p class="card-description">Comprehensive maternity coverage for expecting mothers with newborn care benefits.</p>
+                <div class="card-details">
+                    <div class="card-price">₹6,999</div>
+                    <div class="card-term">Annual</div>
+                </div>
+                <ul class="card-features">
+                    <li>Coverage up to ₹3 Lakhs</li>
+                    <li>Prenatal & postnatal care</li>
+                    <li>Newborn coverage</li>
+                    <li>Vaccination expenses</li>
+                </ul>
+                <button class="card-button">Choose Plan</button>
+            </div>
+
+            <!-- Card 7: Super Premium Insurance -->
+            <div class="insurance-card">
+                <div class="card-icon">💎</div>
+                <h3 class="card-title">Elite Health Platinum</h3>
+                <p class="card-description">Ultimate health insurance with unlimited benefits, global coverage, and premium services.</p>
+                <div class="card-details">
+                    <div class="card-price">₹25,999</div>
+                    <div class="card-term">Annual</div>
+                </div>
+                <ul class="card-features">
+                    <li>No coverage limit</li>
+                    <li>Worldwide coverage</li>
+                    <li>Personal health manager</li>
+                    <li>Premium hospital network</li>
+                </ul>
+                <button class="card-button">Choose Plan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="particle" style="top: 10%; left: 10%; animation-delay: 0s;">💫</div>
+    <div class="particle" style="top: 20%; right: 10%; animation-delay: 1s;">✨</div>
+    <div class="particle" style="bottom: 30%; left: 5%; animation-delay: 2s;">🌟</div>
+    <div class="particle" style="bottom: 10%; right: 20%; animation-delay: 3s;">💫</div>
+
+    <script>
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all insurance cards
+        document.querySelectorAll('.insurance-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add interactive button effects
+        document.querySelectorAll('.card-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-2px)';
+                }, 150);
+            });
+        });
+
+        // Parallax effect for particles
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.particle');
+            
+            parallaxElements.forEach((element, index) => {
+                const speed = 0.5 + (index * 0.1);
+                element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+            });
+        });
+
+        // Add hover sound effect simulation
+        document.querySelectorAll('.insurance-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            });
+        });
+    </script>
+</body>
+</html>

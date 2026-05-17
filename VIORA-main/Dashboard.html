@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIORA - Energize Your Health</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Dashboard Navigation (initially hidden) -->
+    <nav class="dashboard-nav" id="dashboardNav">
+        <div class="nav-brand">
+            <div class="nav-logo">VIORA</div>
+            <div class="nav-tagline">Energize Your Health</div>
+        </div>
+        <div class="nav-menu">
+            <a href="#homeContent" class="nav-item">Home</a>
+            <a href="aboutUs.html" class="nav-item">About Us</a>
+            <a href="bookappointment.html" class="nav-item">Book Appointment</a>
+            <a href="insurance.html" class="nav-item">Insurance</a>
+            <a href="viora-tracker.html" class="nav-item">Tracker</a>
+            <a href="contactUs.html" class="nav-item">Contact Us</a>
+        </div>
+        <div class="nav-actions">
+            <a href="login/index.html" class="nav-item" style="border: 2px solid #10b981; color: #10b981; padding: 8px 16px; border-radius: 30px;">Log In</a>
+            <a href="login/index.html" class="nav-item" style="background: linear-gradient(45deg, #10b981, #06d6a0); color: white; padding: 8px 16px; border-radius: 30px;">Register</a>
+        </div>
+    </nav>
+
+    <!-- Landing Page -->
+    <div class="landing-container" id="landingContainer">
+        <div class="bg-animation">
+            <div class="floating-orb orb-1"></div>
+            <div class="floating-orb orb-2"></div>
+            <div class="floating-orb orb-3"></div>
+            
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+        </div>
+
+        <div class="content">
+            <div class="logo-section">
+                <h1 class="logo">VIORA</h1>
+                <p class="tagline">Energize Your Health</p>
+            </div>
+            
+            <p class="description">
+                Transform your wellness journey with VIORA's innovative health solutions. 
+                Create a vibrant atmosphere of energy and vitality that empowers your healthiest self.
+            </p>
+            
+            <div class="cta-section">
+                <button class="enter-btn" onclick="enterDashboard()">
+                    <span>Enter Your Health Journey</span>
+                    <span class="arrow">→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Dashboard Content -->
+    <div id="homeContent" class="dashboard-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Welcome to Your Health Journey</h1>
+                    <p class="hero-subtitle">Take control of your wellness with personalized healthcare solutions designed just for you.</p>
+                    <div class="hero-actions">
+                        <button class="primary-btn"><a href="bookappointment.html" style="text-decoration: none; color:#fff;">Book Consultation</a></button>
+                        <button class="secondary-btn" ><a href="#servicessection" style="text-decoration: none; color:#06d6a0;">Explore Services</a></button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="health-icon">🏥</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-label">Happy Patients</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚕️</div>
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Expert Doctors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support Available</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Overview -->
+        <section class="services-section" id="servicessection">
+            <div class="section-header">
+                <h2>Our Healthcare Services</h2>
+                <p>Comprehensive care tailored to your unique health needs</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">💻</div>
+                    <h3>Virtual Consultations</h3>
+                    <p>Connect with healthcare professionals from the comfort of your home through secure video calls.</p>
+                    <div class="service-price">Starting at &#8377;300</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏥</div>
+                    <h3>In-Person Visits</h3>
+                    <p>Schedule appointments at our modern facilities with state-of-the-art medical equipment.</p>
+                    <div class="service-price">Starting at &#8377;500</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🧪</div>
+                    <h3>Laboratory Tests</h3>
+                    <p>Comprehensive lab testing with quick results and detailed analysis from certified labs.</p>
+                    <div class="service-price">Fully Covered</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💊</div>
+                    <h3>Prescription Services</h3>
+                    <p>Easy prescription management with home delivery and insurance coordination.</p>
+                    <div class="service-price">Generic: &#8377;250</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🎯</div>
+                    <h3>Specialist Referrals</h3>
+                    <p>Connect with the right specialists for your specific health conditions and concerns.</p>
+                    <div class="service-price">Fully Covered</div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📱</div>
+                    <h3>Health Tracking</h3>
+                    <p>Monitor your health metrics with our gamified tracking system and personalized insights.</p>
+                    <div class="service-price">Free</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+             
+      
+</div>
+    <script>
+        // Track if dashboard has been entered
+        let dashboardEntered = false;
+
+        function enterDashboard() {
+            if (dashboardEntered) return; // Prevent multiple calls
+            
+            dashboardEntered = true;
+            
+            // Get elements
+            const landing = document.getElementById('landingContainer');
+            const nav = document.getElementById('dashboardNav');
+            const homeContent = document.getElementById('homeContent');
+            
+            // Animate landing page out
+            landing.classList.add('hidden');
+            
+            // Show dashboard nav after a short delay
+            setTimeout(() => {
+                nav.classList.add('active');
+                homeContent.classList.add('active');
+                document.body.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)';
+                
+                // Completely remove landing page from DOM after animation
+                setTimeout(() => {
+                    landing.remove();
+                }, 800);
+            }, 400);
+        }
+
+        // Interactive mouse effects for landing page only
+        document.addEventListener('mousemove', (e) => {
+            // Only apply effects if landing page is still visible
+            if (!dashboardEntered) {
+                const orbs = document.querySelectorAll('.floating-orb');
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                orbs.forEach((orb, index) => {
+                    const speed = (index + 1) * 0.5;
+                    orb.style.transform = `translate(${x * speed * 20}px, ${y * speed * 20}px)`;
+                });
+            }
+        });
+
+        // Prevent any accidental reloading of landing page
+        window.addEventListener('scroll', () => {
+            if (dashboardEntered) {
+                // Ensure landing page stays hidden even if there are any scroll issues
+                const landing = document.getElementById('landingContainer');
+                if (landing) {
+                    landing.style.display = 'none';
+                }
+            }
+        });
+
+        // Prevent browser back button from showing landing page
+        window.addEventListener('popstate', (e) => {
+            if (dashboardEntered) {
+                e.preventDefault();
+                // Keep dashboard visible
+                return false;
+            }
+        });
+         document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const ratingValue = document.getElementById('rating-value');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-rating');
+                    ratingValue.value = rating;
+                    
+                    // Update star display
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.opacity = '1';
+                            s.style.transform = 'scale(1.2)';
+                        } else {
+                            s.style.opacity = '0.3';
+                            s.style.transform = 'scale(1)';
+                        }
+                    });
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const rating = this.getAttribute('data-rating');
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.style.opacity = '1';
+                        } else {
+                            s.style.opacity = '0.3';
+                        }
+                    });
+                });
+            });
+            
+            // Review Form Submission
+            document.getElementById('reviewForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const formData = new FormData(this);
+                const reviewData = {
+                    name: formData.get('reviewer-name'),
+                    rating: formData.get('rating'),
+                    title: formData.get('review-title'),
+                    text: formData.get('review-text'),
+                    service: formData.get('service-type')
+                };
+                
+                // Create new review card
+                const reviewCard = createReviewCard(reviewData);
+                
+                // Add to reviews grid
+                const reviewsGrid = document.getElementById('reviewsGrid');
+                reviewsGrid.insertBefore(reviewCard, reviewsGrid.firstChild);
+                
+                // Reset form
+                this.reset();
+                ratingValue.value = '';
+                stars.forEach(s => {
+                    s.style.opacity = '0.3';
+                    s.style.transform = 'scale(1)';
+                });
+                
+                // Show success message
+                alert('Thank you for your review! It has been posted successfully.');
+            });
+        });
+        
+        function createReviewCard(data) {
+            const reviewCard = document.createElement('div');
+            reviewCard.className = 'review-card new-review';
+            
+            const starString = '⭐'.repeat(parseInt(data.rating));
+            const avatar = data.name.charAt(0).toUpperCase();
+            
+            reviewCard.innerHTML = `
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">${avatar}</div>
+                        <div class="reviewer-details">
+                            <h4>${data.name}</h4>
+                            <span class="review-date">Just now</span>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="stars">${starString}</span>
+                        <span class="rating-number">${data.rating}.0</span>
+                    </div>
+                </div>
+                <div class="review-content">
+                    <h5>${data.title}</h5>
+                    <p>"${data.text}"</p>
+                    <div class="review-service">${data.service.charAt(0).toUpperCase() + data.service.slice(1)}</div>
+                </div>
+                <div class="review-actions">
+                    <button class="helpful-btn">👍 Helpful (0)</button>
+                    <button class="reply-btn">💬 Reply</button>
+                </div>
+            `;
+            
+            return reviewCard;}
+           
+    </script>
+</body>
+</html>

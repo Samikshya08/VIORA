@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Appointment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gradient: linear-gradient(135deg, #00f5ff 0%, #00d4ff 20%, #0099ff 40%, #0066ff 60%, #0033ff 80%, #001aff 100%);
+            --primary: #00f5ff;
+            --secondary: #0066ff;
+            --dark: #001a33;
+            --light: #f8fdff;
+            --shadow: rgba(0, 26, 255, 0.1);
+            --accent: rgba(0, 245, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gradient);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient);
+        }
+
+        .header {
+            padding: 40px 40px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(0, 102, 255, 0.05));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 0.1; }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header p {
+            color: var(--secondary);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(0, 102, 255, 0.2);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 245, 255, 0.2);
+        }
+
+        input:focus + .focus-line, select:focus + .focus-line {
+            transform: scaleX(1);
+        }
+
+        .focus-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .checkbox-group {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.05), rgba(0, 102, 255, 0.02));
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(0, 102, 255, 0.1);
+            margin: 25px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            transform: translateX(5px);
+        }
+
+        .checkbox-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 12px;
+            cursor: pointer;
+            transform: scale(1.3);
+        }
+
+        .checkbox-item input[type="radio"] {
+            width: auto;
+            margin-right: 12px;
+            cursor: pointer;
+            transform: scale(1.3);
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .appointment-type {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .type-option {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .type-option input[type="radio"] {
+            display: none;
+        }
+
+        .type-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 2px solid rgba(0, 102, 255, 0.2);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+
+        .type-option input[type="radio"]:checked + label {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(0, 102, 255, 0.05));
+            transform: scale(1.05);
+        }
+
+        .type-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+            margin: 30px auto 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 102, 255, 0.3);
+        }
+
+        .submit-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .submit-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header, .form-container {
+                padding: 25px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .appointment-type {
+                grid-template-columns: 1fr;
+            }
+
+            .type-option label {
+                padding: 15px;
+            }
+
+            .submit-btn {
+                width: 100%;
+                padding: 15px 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-container {
+                padding: 20px 15px;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            input, select, textarea {
+                border-color: var(--dark);
+            }
+
+            input:focus, select:focus, textarea:focus {
+                border-color: var(--secondary);
+                box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Book Your Appointment</h1>
+            <p>Schedule your visit with our healthcare professionals</p>
+        </div>
+
+        <div class="form-container">
+            <form id="appointmentForm" role="form" aria-label="Doctor appointment booking form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="doctorName">Doctor's Name *</label>
+                        <select id="doctorName" name="doctorName" required aria-required="true">
+                            <option value="">Select a doctor</option>
+                            <option value="dr-smith">Dr. Sarah Smith</option>
+                            <option value="dr-johnson">Dr. Michael Johnson</option>
+                            <option value="dr-williams">Dr. Emily Williams</option>
+                            <option value="dr-brown">Dr. David Brown</option>
+                            <option value="dr-davis">Dr. Lisa Davis</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialization">Specialization *</label>
+                        <select id="specialization" name="specialization" required aria-required="true">
+                            <option value="">Select specialization</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="dermatology">Dermatology</option>
+                            <option value="neurology">Neurology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                            <option value="pediatrics">Pediatrics</option>
+                            <option value="psychiatry">Psychiatry</option>
+                            <option value="general">General Medicine</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hospitalName">Hospital/Clinic *</label>
+                        <select id="hospitalName" name="hospitalName" required aria-required="true">
+                            <option value="">Select hospital</option>
+                            <option value="city-general">City General Hospital</option>
+                            <option value="mercy-medical">Mercy Medical Center</option>
+                            <option value="st-marys">St. Mary's Hospital</option>
+                            <option value="downtown-clinic">Downtown Health Clinic</option>
+                            <option value="wellness-center">Wellness Medical Center</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="patientAge">Patient Age *</label>
+                        <input type="number" id="patientAge" name="patientAge" min="1" max="120" required aria-required="true" placeholder="Enter patient age">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appointmentDate">Preferred Date *</label>
+                        <input type="date" id="appointmentDate" name="appointmentDate" required aria-required="true">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="appointmentTime">Preferred Time *</label>
+                        <input type="time" id="appointmentTime" name="appointmentTime" required aria-required="true">
+                    </div>
+                </div>
+
+                <div class="checkbox-group" role="group" aria-labelledby="insurance-heading">
+                    <h3 id="insurance-heading" style="margin-bottom: 15px; color: var(--secondary);">Insurance Coverage</h3>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="checkInsurance" name="checkInsurance" value="yes">
+                        <label for="checkInsurance">Check if costs are covered by insurance</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="preAuth" name="preAuth" value="yes">
+                        <label for="preAuth">Request pre-authorization if needed</label>
+                    </div>
+                </div>
+
+                <div class="checkbox-group" role="radiogroup" aria-labelledby="appointment-type-heading">
+                    <h3 id="appointment-type-heading" style="margin-bottom: 15px; color: var(--secondary);">Appointment Type *</h3>
+                    <div class="appointment-type">
+                        <div class="type-option">
+                            <input type="radio" id="faceToFace" name="appointmentType" value="face-to-face" required aria-required="true">
+                            <label for="faceToFace">
+                                <div class="type-icon">🏥</div>
+                                <strong>Face to Face</strong>
+                                <span style="font-size: 0.9rem; color: #666; margin-top: 5px;">In-person visit at the clinic</span>
+                            </label>
+                        </div>
+                        <div class="type-option">
+                            <input type="radio" id="videoCall" name="appointmentType" value="video-call" required aria-required="true">
+                            <label for="videoCall">
+                                <div class="type-icon">📹</div>
+                                <strong>Video Call</strong>
+                                <span style="font-size: 0.9rem; color: #666; margin-top: 5px;">Online consultation</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="additionalNotes">Additional Notes (Optional)</label>
+                    <textarea id="additionalNotes" name="additionalNotes" rows="4" placeholder="Any specific concerns or information you'd like to share..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" aria-label="Submit appointment booking form">
+                    <span>Book Appointment</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('appointmentDate').setAttribute('min', today);
+
+        // Form submission handler
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simple form validation feedback
+            const submitBtn = document.querySelector('.submit-btn span');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Booking...';
+            
+            // Simulate booking process
+            setTimeout(() => {
+                submitBtn.textContent = 'Appointment Booked! ✓';
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                }, 3000);
+            }, 2000);
+        });
+
+        // Dynamic doctor-specialization matching (optional enhancement)
+        const doctorSpecializations = {
+            'dr-smith': 'cardiology',
+            'dr-johnson': 'orthopedics',
+            'dr-williams': 'pediatrics',
+            'dr-brown': 'neurology',
+            'dr-davis': 'dermatology'
+        };
+
+        document.getElementById('doctorName').addEventListener('change', function() {
+            const selectedDoctor = this.value;
+            const specializationSelect = document.getElementById('specialization');
+            
+            if (selectedDoctor && doctorSpecializations[selectedDoctor]) {
+                specializationSelect.value = doctorSpecializations[selectedDoctor];
+            }
+        });
+    </script>
+</body>
+</html>

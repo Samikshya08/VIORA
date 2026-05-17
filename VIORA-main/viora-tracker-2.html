@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIORA Health Quest - Track Your Vitals</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .level-display {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .trackers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .tracker-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .tracker-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: #00ff88;
+        }
+
+        .tracker-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0,255,136,0.1), transparent);
+            animation: rotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tracker-card:hover::before {
+            opacity: 1;
+        }
+
+        .tracker-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-align: center;
+            animation: bounce 2s infinite;
+        }
+
+        .tracker-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #00ff88;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0,255,136,0.3);
+            transform: scale(1.02);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .track-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .track-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,255,136,0.4);
+        }
+
+        .track-button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .result.safe {
+            background: rgba(0,255,136,0.2);
+            border: 2px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .result.warning {
+            background: rgba(255,193,7,0.2);
+            border: 2px solid #ffc107;
+            color: #ffc107;
+        }
+
+        .result.danger {
+            background: rgba(220,53,69,0.2);
+            border: 2px solid #dc3545;
+            color: #ff6b6b;
+        }
+
+        .xp-bar {
+            background: rgba(255,255,255,0.1);
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88, #00d4ff);
+            width: 0;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .xp-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .stat-item {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(0,255,136,0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(0,212,255,0.8);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(0,255,136,0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .trackers-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tracker-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo">VIORA</div>
+            <div class="subtitle">Health Quest Adventure</div>
+            <div class="level-display">
+                🏆 Level <span id="userLevel">1</span> Health Guardian
+            </div>
+        </div>
+
+        <div class="trackers-grid">
+            <!-- Diabetes Tracker -->
+            <div class="tracker-card" style="animation-delay: 0.1s">
+                <div class="tracker-icon">🩸</div>
+                <div class="tracker-title">Blood Sugar Quest</div>
+                <div class="input-group">
+                    <label for="glucose">Blood Glucose (mg/dL)</label>
+                    <input type="number" id="glucose" placeholder="Enter glucose level">
+                </div>
+                <button class="track-button" onclick="trackGlucose()">Analyze Sugar Level</button>
+                <div class="result" id="glucoseResult"></div>
+            </div>
+
+            <!-- Blood Pressure Tracker -->
+            <div class="tracker-card" style="animation-delay: 0.2s">
+                <div class="tracker-icon">💓</div>
+                <div class="tracker-title">Pressure Power Check</div>
+                <div class="input-group">
+                    <label for="systolic">Systolic (mmHg)</label>
+                    <input type="number" id="systolic" placeholder="Top number">
+                </div>
+                <div class="input-group">
+                    <label for="diastolic">Diastolic (mmHg)</label>
+                    <input type="number" id="diastolic" placeholder="Bottom number">
+                </div>
+                <button class="track-button" onclick="trackBloodPressure()">Check Pressure Stats</button>
+                <div class="result" id="bpResult"></div>
+            </div>
+
+            <!-- Weight Monitor -->
+            <div class="tracker-card" style="animation-delay: 0.3s">
+                <div class="tracker-icon">⚖️</div>
+                <div class="tracker-title">Weight Warrior</div>
+                <div class="input-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="Enter weight">
+                </div>
+                <div class="input-group">
+                    <label for="height">Height (cm)</label>
+                    <input type="number" id="height" placeholder="Enter height">
+                </div>
+                <button class="track-button" onclick="trackWeight()">Calculate BMI Score</button>
+                <div class="result" id="weightResult"></div>
+            </div>
+
+            <!-- Heart Rate Tracker -->
+            <div class="tracker-card" style="animation-delay: 0.4s">
+                <div class="tracker-icon">💗</div>
+                <div class="tracker-title">Heartbeat Hero</div>
+                <div class="input-group">
+                    <label for="heartRate">Heart Rate (BPM)</label>
+                    <input type="number" id="heartRate" placeholder="Beats per minute">
+                </div>
+                <div class="input-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" placeholder="Your age">
+                </div>
+                <button class="track-button" onclick="trackHeartRate()">Measure Heart Power</button>
+                <div class="result" id="heartResult"></div>
+            </div>
+
+            <!-- Temperature Tracker -->
+            <div class="tracker-card" style="animation-delay: 0.5s">
+                <div class="tracker-icon">🌡️</div>
+                <div class="tracker-title">Temperature Guardian</div>
+                <div class="input-group">
+                    <label for="temperature">Body Temperature (°C)</label>
+                    <input type="number" step="0.1" id="temperature" placeholder="Enter temperature">
+                </div>
+                <button class="track-button" onclick="trackTemperature()">Check Thermal Status</button>
+                <div class="result" id="tempResult"></div>
+            </div>
+        </div>
+
+        <div class="xp-bar">
+            <div class="xp-fill" id="xpFill"></div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="totalChecks">0</div>
+                <div class="stat-label">Health Checks</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="safeReadings">0</div>
+                <div class="stat-label">Safe Readings</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="currentXP">0</div>
+                <div class="stat-label">XP Points</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            level: 1,
+            xp: 0,
+            totalChecks: 0,
+            safeReadings: 0,
+            maxXP: 100
+        };
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Update game stats
+        function updateStats(isSafe = false) {
+            gameState.totalChecks++;
+            if (isSafe) {
+                gameState.safeReadings++;
+                gameState.xp += 15;
+            } else {
+                gameState.xp += 5;
+            }
+
+            // Level up check
+            if (gameState.xp >= gameState.maxXP) {
+                gameState.level++;
+                gameState.xp = 0;
+                gameState.maxXP += 50;
+                showLevelUp();
+            }
+
+            // Update UI
+            document.getElementById('userLevel').textContent = gameState.level;
+            document.getElementById('totalChecks').textContent = gameState.totalChecks;
+            document.getElementById('safeReadings').textContent = gameState.safeReadings;
+            document.getElementById('currentXP').textContent = gameState.xp;
+            
+            const xpPercentage = (gameState.xp / gameState.maxXP) * 100;
+            document.getElementById('xpFill').style.width = xpPercentage + '%';
+        }
+
+        function showLevelUp() {
+            // Create level up animation
+            const levelUpDiv = document.createElement('div');
+            levelUpDiv.innerHTML = `
+                <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                           background: linear-gradient(45deg, #00ff88, #00d4ff); 
+                           padding: 30px; border-radius: 20px; z-index: 1000;
+                           animation: bounce 1s ease; text-align: center; font-size: 2rem; font-weight: bold;">
+                    🎉 LEVEL UP! 🎉<br>
+                    <span style="font-size: 1.5rem;">Level ${gameState.level} Health Guardian!</span>
+                </div>
+            `;
+            document.body.appendChild(levelUpDiv);
+            setTimeout(() => levelUpDiv.remove(), 2000);
+        }
+
+        function showResult(elementId, status, message, advice) {
+            const resultElement = document.getElementById(elementId);
+            resultElement.className = `result ${status} show`;
+            resultElement.innerHTML = `
+                <div style="font-size: 1.2rem; margin-bottom: 10px;">${message}</div>
+                <div style="font-size: 0.9rem; opacity: 0.9;">${advice}</div>
+            `;
+            
+            updateStats(status === 'safe');
+        }
+
+        function trackGlucose() {
+            const glucose = parseFloat(document.getElementById('glucose').value);
+            if (!glucose) return;
+
+            let status, message, advice;
+            
+            if (glucose < 70) {
+                status = 'danger';
+                message = '⚠️ Low Blood Sugar Alert!';
+                advice = 'Quest Failed: Eat something sweet immediately and consult your doctor.';
+            } else if (glucose <= 100) {
+                status = 'safe';
+                message = '✅ Perfect Sugar Balance!';
+                advice = 'Quest Complete: Your glucose levels are in the optimal range!';
+            } else if (glucose <= 125) {
+                status = 'warning';
+                message = '⚡ Elevated Sugar Level';
+                advice = 'Mini Quest: Consider reducing sugar intake and increase physical activity.';
+            } else {
+                status = 'danger';
+                message = '🚨 High Blood Sugar Warning!';
+                advice = 'Emergency Quest: Consult your healthcare provider immediately.';
+            }
+
+            showResult('glucoseResult', status, message, advice);
+        }
+
+        function trackBloodPressure() {
+            const systolic = parseFloat(document.getElementById('systolic').value);
+            const diastolic = parseFloat(document.getElementById('diastolic').value);
+            if (!systolic || !diastolic) return;
+
+            let status, message, advice;
+            
+            if (systolic < 90 || diastolic < 60) {
+                status = 'warning';
+                message = '📉 Low Pressure Detected';
+                advice = 'Side Quest: Stay hydrated and avoid sudden position changes.';
+            } else if (systolic <= 120 && diastolic <= 80) {
+                status = 'safe';
+                message = '🎯 Perfect Pressure Score!';
+                advice = 'Epic Win: Your blood pressure is in the ideal range!';
+            } else if (systolic <= 139 || diastolic <= 89) {
+                status = 'warning';
+                message = '⚠️ Pre-Hypertension Zone';
+                advice = 'Challenge Mode: Focus on diet, exercise, and stress management.';
+            } else {
+                status = 'danger';
+                message = '🚨 High Pressure Alert!';
+                advice = 'Boss Battle: Please consult your doctor for proper management.';
+            }
+
+            showResult('bpResult', status, message, advice);
+        }
+
+        function trackWeight() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            if (!weight || !height) return;
+
+            const bmi = weight / Math.pow(height / 100, 2);
+            let status, message, advice;
+            
+            if (bmi < 18.5) {
+                status = 'warning';
+                message = `📊 BMI: ${bmi.toFixed(1)} - Underweight`;
+                advice = 'Power-Up Quest: Focus on healthy weight gain with nutritious foods.';
+            } else if (bmi <= 24.9) {
+                status = 'safe';
+                message = `🏆 BMI: ${bmi.toFixed(1)} - Perfect Weight!`;
+                advice = 'Champion Status: Maintain your healthy lifestyle!';
+            } else if (bmi <= 29.9) {
+                status = 'warning';
+                message = `⚡ BMI: ${bmi.toFixed(1)} - Overweight`;
+                advice = 'Training Quest: Combine cardio exercises with a balanced diet.';
+            } else {
+                status = 'danger';
+                message = `🚨 BMI: ${bmi.toFixed(1)} - Obesity Range`;
+                advice = 'Epic Quest: Consult a nutritionist for a personalized plan.';
+            }
+
+            showResult('weightResult', status, message, advice);
+        }
+
+        function trackHeartRate() {
+            const heartRate = parseFloat(document.getElementById('heartRate').value);
+            const age = parseFloat(document.getElementById('age').value);
+            if (!heartRate || !age) return;
+
+            const maxHR = 220 - age;
+            const restingLow = 60;
+            const restingHigh = 100;
+            
+            let status, message, advice;
+            
+            if (heartRate < restingLow) {
+                status = 'warning';
+                message = '🐢 Low Heart Rate Detected';
+                advice = 'Stealth Mode: Monitor regularly, consult doctor if you feel symptoms.';
+            } else if (heartRate <= restingHigh) {
+                status = 'safe';
+                message = '💪 Healthy Heart Rhythm!';
+                advice = 'Warrior Status: Your heart is beating in perfect rhythm!';
+            } else if (heartRate <= maxHR * 0.85) {
+                status = 'warning';
+                message = '🏃 Elevated Heart Rate';
+                advice = 'Active Mode: Normal if exercising, rest if at rest.';
+            } else {
+                status = 'danger';
+                message = '🚨 Very High Heart Rate!';
+                advice = 'Emergency Protocol: Stop activity and seek medical attention if needed.';
+            }
+
+            showResult('heartResult', status, message, advice);
+        }
+
+        function trackTemperature() {
+            const temp = parseFloat(document.getElementById('temperature').value);
+            if (!temp) return;
+
+            let status, message, advice;
+            
+            if (temp < 35.0) {
+                status = 'danger';
+                message = '🥶 Hypothermia Risk!';
+                advice = 'Critical Quest: Warm up immediately and seek medical help.';
+            } else if (temp <= 37.2) {
+                status = 'safe';
+                message = '🌡️ Normal Temperature!';
+                advice = 'Perfect Balance: Your body temperature is optimal!';
+            } else if (temp <= 38.0) {
+                status = 'warning';
+                message = '🔥 Mild Fever Detected';
+                advice = 'Recovery Quest: Rest, hydrate, and monitor temperature.';
+            } else {
+                status = 'danger';
+                message = '🌋 High Fever Alert!';
+                advice = 'Boss Fight: Take fever reducers and consult a doctor.';
+            }
+
+            showResult('tempResult', status, message, advice);
+        }
+
+        // Initialize the game
+        createParticles();
+        updateStats();
+    </script>
+</body>
+</html>
